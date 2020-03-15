@@ -13,15 +13,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+// include stdbool.h for bool in gcc
+#include <stdbool.h>
 
-struct stack {
+// In gcc - "typedef struct{...}stack;" is a must for sparing the keywork - "struct",
+//          otherwise "struct stack" is a must.
+//          Also bool type doesn't exist in C;
+// In g++ - it can just be struct stack {...}; 
+typedef struct{
     int capacity;
     int top;
     int* item;
-};
+}stack;
 
-struct stack* newStack(int _capacity) {
-    struct stack* new_s = (struct stack*)malloc(sizeof(struct stack*));
+stack* newStack(int _capacity) {
+    stack* new_s = (stack*)malloc(sizeof(stack*));
     new_s->capacity = _capacity;
     new_s->top = -1;
     new_s->item = (int*)malloc(_capacity * sizeof(int));
@@ -29,19 +35,19 @@ struct stack* newStack(int _capacity) {
     return new_s;
 }
 
-bool isEmpty(struct stack* s) {
+bool isEmpty(stack* s) {
     return s->top == -1 ? 1 : 0; 
 }
 
-bool isFull(struct stack* s) {
+bool isFull(stack* s) {
     return s->top == s->capacity - 1 ? 1 : 0;
 }
 
-int sizeofStack(struct stack* s) {
+int sizeofStack(stack* s) {
     return s->top + 1;
 }
 
-void push(struct stack* s, int x) {
+void push(stack* s, int x) {
     // assert(!isFull(s));
     if ( isFull(s) ) {
         printf("Full Stack - Cannot add more element!\n");
@@ -51,18 +57,18 @@ void push(struct stack* s, int x) {
         s->item[++s->top] = x;
 }    
 
-int peek(struct stack* s) {
+int peek(stack* s) {
     assert(!isEmpty(s));
     // printf("Empty Stack!\n");
     return s->item[s->top];
 }
 
-int pop(struct stack* s) {
+int pop(stack* s) {
     assert(!isEmpty(s));
     return s->item[s->top--];
 }
 
-void clearStack(struct stack* s) {
+void clearStack(stack* s) {
     while( !isEmpty(s) )
         pop(s);
     // free(s->item);
@@ -71,7 +77,7 @@ void clearStack(struct stack* s) {
 
 int main (int argc, char** argv) {
     
-    struct stack* myStack = newStack(3);
+    stack* myStack = newStack(3);
     push(myStack, 10);
     push(myStack, 20);
     push(myStack, 30);
