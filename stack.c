@@ -20,8 +20,8 @@ struct stack {
     int* item;
 };
 
-stack* newStack(int _capacity) {
-    stack* new_s = (stack*)malloc(sizeof(stack*));
+struct stack* newStack(int _capacity) {
+    struct stack* new_s = (struct stack*)malloc(sizeof(struct stack*));
     new_s->capacity = _capacity;
     new_s->top = -1;
     new_s->item = (int*)malloc(_capacity * sizeof(int));
@@ -29,19 +29,19 @@ stack* newStack(int _capacity) {
     return new_s;
 }
 
-bool isEmpty(stack* s) {
+bool isEmpty(struct stack* s) {
     return s->top == -1 ? 1 : 0; 
 }
 
-bool isFull(stack* s) {
+bool isFull(struct stack* s) {
     return s->top == s->capacity - 1 ? 1 : 0;
 }
 
-int sizeofStack(stack* s) {
+int sizeofStack(struct stack* s) {
     return s->top + 1;
 }
 
-void push(stack* s, int x) {
+void push(struct stack* s, int x) {
     // assert(!isFull(s));
     if ( isFull(s) ) {
         printf("Full Stack - Cannot add more element!\n");
@@ -51,18 +51,18 @@ void push(stack* s, int x) {
         s->item[++s->top] = x;
 }    
 
-int peek(stack* s) {
+int peek(struct stack* s) {
     assert(!isEmpty(s));
     // printf("Empty Stack!\n");
     return s->item[s->top];
 }
 
-int pop(stack* s) {
+int pop(struct stack* s) {
     assert(!isEmpty(s));
     return s->item[s->top--];
 }
 
-void clearStack(stack* s) {
+void clearStack(struct stack* s) {
     while( !isEmpty(s) )
         pop(s);
     // free(s->item);
@@ -71,7 +71,7 @@ void clearStack(stack* s) {
 
 int main (int argc, char** argv) {
     
-    stack* myStack = newStack(3);
+    struct stack* myStack = newStack(3);
     push(myStack, 10);
     push(myStack, 20);
     push(myStack, 30);
@@ -88,6 +88,7 @@ int main (int argc, char** argv) {
     printf("%s%d %s%d\n", "stackAddr", myStack, "size=", sizeofStack(myStack));
     
     free(myStack);
+
     return 0;
 }
 
