@@ -18,10 +18,10 @@
 // for INT_MIN / INT_MAX
 #include <limits.h>
 
-typedef struct{
+typedef struct queue{
+    int rear, front;
+    unsigned capacity;
     int* item;
-    int front, rear;
-    int capacity;
 }queue;
 
 queue* newQueue(int _capacity) {
