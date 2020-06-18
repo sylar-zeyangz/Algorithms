@@ -318,8 +318,8 @@ int main (int argc, char** argv) {
     bst.bfs(root);
     // bst.inOrder(root);
     // cout << "findNode: " << bst.findNode(root, 4)->val << endl;
-    cout << "nextLargerNode: " << bst.nextLargerNode(root, 5)->val << endl;
-    cout << "nextSmallerNode: " << bst.nextSmallerNode(root, 2)->val << endl;
+    cout << "nextLargerNode: " << bst.nextLargerNode(root, 4)->val << endl;
+    cout << "nextSmallerNode: " << bst.nextSmallerNode(root, 4)->val << endl;
     
     BST* tree_list = NULL;
     bst.flatten(root);
