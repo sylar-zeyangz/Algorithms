@@ -63,7 +63,7 @@ int main () {
     //res = insertionSort(a, size);
     //res = mergeSort(a, 0, size - 1);
     //res = quickSort(a, 0, size - 1);
-    //res = bubbleSort(a, size);
+    res = bubbleSort(a, size);
     printArray(res, size);
     compareArray(res, ans, size);
     cout << "Success!\n";
@@ -175,7 +175,7 @@ int partition(int* _a, int start, int end) {
 int* bubbleSort(int* _a, int _size) {
     // Time: n^2 (Worst = Ave), Space 1 
     // Note that the best case of Time Complexity is n
-    if (_size <= 2) 
+    if (_size < 2) 
         return _a;
     for (int i = 0; i < _size; ++i) {
         for (int j = 0; j < _size - i - 1; ++j) {
