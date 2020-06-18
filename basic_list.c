@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define GAP 1
+#define GAP 2
 
 struct list {
     list* next;
@@ -61,6 +61,7 @@ void clearAll(list* head) {
     }   
     head = NULL;
     free(head);
+    printf("Clear Completed!\n");
 }
 
 void printList(list* head) {
@@ -78,11 +79,10 @@ int checkMissingNode(list* head) {
 
     struct list* dummy = head;
     while(dummy != NULL && dummy->next != NULL) {
-        int t = 0;
-        while (dummy->val + GAP*(t++) != dummy->next->val) {
+        //while (dummy->val + GAP*(t++) != dummy->next->val) {
             if (dummy->next->val - dummy->val != GAP)
-                ret = dummy->val + GAP * t - 1;
-        }
+                ret = dummy->val + GAP;
+        //}
         dummy = dummy->next;
         
     }
@@ -94,13 +94,13 @@ int main(int argc, char **argv)
     list* head = (struct list*)malloc(sizeof(struct list));
     head->val = 3;
     head->next = NULL;
-    addNode(head, 4); 
     addNode(head, 5); 
-    addNode(head, 6); 
     addNode(head, 7); 
-    addNode(head, 8); 
     addNode(head, 9); 
-    deleteNode(head, 7);
+    addNode(head, 11); 
+    addNode(head, 13); 
+    addNode(head, 15); 
+    deleteNode(head, 11);
     //clearAll(head);
     int missing_val;
     missing_val = checkMissingNode(head);
