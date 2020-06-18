@@ -27,7 +27,7 @@ typedef struct{
 }stack;
 
 stack* newStack(int _capacity) {
-    stack* new_s = (stack*)malloc(sizeof(stack*));
+    stack* new_s = (stack*)malloc(sizeof(stack));
     new_s->capacity = _capacity;
     new_s->top = -1;
     new_s->item = (int*)malloc(_capacity * sizeof(int));
