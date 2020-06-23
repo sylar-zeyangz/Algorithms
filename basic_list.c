@@ -33,22 +33,28 @@ void addNode(list* head, int x) {
     new_node->val = x;
 }
 
-void deleteNode(list* head, int x) {
-    struct list* dummy = head;
+void deleteNode(list** head, int x) {
     struct list* prev = NULL;
-    while (dummy != NULL) { 
-        if (dummy->val == x) {
-            prev->next = dummy->next;
-            // tmp = dummy; 
-            free(dummy);
-            break;
+    struct list* tmp = NULL;
+    struct list* curr = *head;
+    for (; curr != NULL; ) {
+        if (curr->val == x) {
+            tmp = curr;
+            if (prev == NULL) {
+                printf("Deleting the first node\n");
+                *head = curr->next;
+            }
+            else
+                prev->next = curr->next;
         }
-        prev = dummy;
-        dummy = dummy->next; 
-        
-        if (dummy == NULL)
-            printf("Can't find node with val = %d\n", x);
+        else
+            prev = curr;
+        curr = curr->next;
+        if (tmp != NULL)
+            free(tmp);
     }
+
+    return;
 }
 
 void clearAll(list* head) {
@@ -95,16 +101,16 @@ int main(int argc, char **argv)
     head->val = 3;
     head->next = NULL;
     addNode(head, 5); 
-    addNode(head, 7); 
+    addNode(head, 5); 
     addNode(head, 9); 
     addNode(head, 11); 
     addNode(head, 13); 
     addNode(head, 15); 
-    deleteNode(head, 11);
+    deleteNode(&head, 5);
     //clearAll(head);
     int missing_val;
-    missing_val = checkMissingNode(head);
-    printf("Missing Element: %d\n", missing_val);
+    //missing_val = checkMissingNode(head);
+    //printf("Missing Element: %d\n", missing_val);
     printList(head);
     
     printf("\nThe End\n");
