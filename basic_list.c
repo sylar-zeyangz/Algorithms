@@ -100,13 +100,13 @@ int main(int argc, char **argv)
     list* head = (struct list*)malloc(sizeof(struct list));
     head->val = 3;
     head->next = NULL;
-    addNode(head, 5); 
+    addNode(head, 3); 
     addNode(head, 5); 
     addNode(head, 9); 
-    addNode(head, 11); 
-    addNode(head, 13); 
+    addNode(head, 9); 
+    addNode(head, 9); 
     addNode(head, 15); 
-    deleteNode(&head, 5);
+    // deleteNode(&head, 5);
     //clearAll(head);
     int missing_val;
     //missing_val = checkMissingNode(head);
