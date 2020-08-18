@@ -1,15 +1,12 @@
 /*
-A linked list is given such that each node contains an additional random pointer 
-which could point to any node in the list or null.
+Given a list of positive integers nums and an int target, 
+return indices of the two numbers such that they add up to a target - 30.
 
-Return a deep copy of the list.
+Conditions:
 
-The Linked List is represented in the input/output as a list of n nodes. 
-Each node is represented as a pair of [val, random_index] where:
-
-val: an integer representing Node.val
-random_index: the index of the node (range from 0 to n-1) 
-where random pointer points to, or null if it does not point to any node.
+You will pick exactly 2 numbers.
+You cannot pick the same element twice.
+If you have muliple pairs, select the pair with the largest number.
 */
 
 #include<iostream>
@@ -18,49 +15,26 @@ where random pointer points to, or null if it does not point to any node.
 #include<climits>
 using namespace std;
 
-// Definition for a Node.
-class Node {
-public:
-    int val;
-    Node* next;
-    Node* random;
-    
-    Node(int _val) {
-        val = _val;
-        next = NULL;
-        random = NULL;
-    }
-};
-
 class Solution {
 public:
-    Node* copyRandomList(Node* head) {
-        if(!head) return nullptr;
-        unordered_map<Node*, Node*> map;
-        Node* cur = map[head] = new Node(head->val);
-        Node* ret = cur;
-        
-        while(head) {
-            if(head->random) {
-                auto it = map.find(head->random);
-                if(it == map.end())
-                    // emplace(iterator pos, Arg& args)
-                    // in-place construct an object args at the position pos
-                    it = map.emplace(head->random, new Node(head->random->val)).first;
-                cur->random = it->second;
+    vector<int> twoSum(vector<int>& nums, int target) {
+        if (nums.size() == 0) return {};
+        unordered_map<int, int> imap;
+        vector<int> result;
+        int curMax = INT_MIN;
+
+        for (int i = 0; i < nums.size() ; ++i) {
+            int toLook = target - 30 - nums[i];
+            auto it = imap.find(toLook);
+
+            if (it != imap.end()) {
+                curMax = curMax > nums[i] ? curMax : nums[i];
+                result = {imap[toLook], i};
             }
-            
-            if(head->next) {
-                auto it = map.find(head->next);
-                if(it == map.end())
-                    it = map.emplace(head->next, new Node(head->next->val)).first;
-                cur->next = it->second;
-            }
-            
-            cur = cur->next;
-            head = head->next;
+
+            imap[nums[i]] = i;
         }
-        return ret;
+        return result;
     }
 };
 
@@ -84,8 +58,10 @@ ostream& operator<<(ostream& os, const vector<int> &input)
 
 int main() {
     
-    Solution s;
-    s.copyRandomList(new Node(5));
-
+    Solution S;
+    vector<int> input = {20, 50, 40, 25, 30, 10};
+    vector<int> result;
+    result = S.twoSum(input, 90);
+    cout<<"The answer is: "<< result << endl;
     return 0;
 }
