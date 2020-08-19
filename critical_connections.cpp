@@ -13,6 +13,8 @@ edges, the list of pair of integers - A, B representing an edge between the node
 
 Output:
 Return a list of integers representing the critical nodes.
+OR
+Return a list of pairs representing the bridges.
 
 Example:
 
@@ -21,6 +23,7 @@ Input: numNodes = 7, numEdges = 7, edges = [[0, 1], [0, 2], [1, 3], [2, 3], [2, 
 
 #include<iostream>
 #include<list>
+#include<utility>  // pair
 using namespace std;
 
 class Graph {
@@ -29,28 +32,48 @@ private:
     int outEdges = 0;
     int id = 0;
     list<int> *adj; // Dynamic array of adjacency vertices
+    list<pair<int, int>> bg; // bridges
     
     bool *visited = new bool(V);  // mark traversed vertices
     int *low = new int(V);  // low-link value for each vertex
-    int *ids = new int(V);
+    //int *ids = new int(V);
     bool *ap = new bool(V);  // track AP 
     // int *parent = new int(V);  // track parent vertices
     
     void dfsAP(int root, int at, int parent);
+    void dfsBG(int at, int parent);
 
 public:
     Graph(int nv) : V{nv} { 
         adj = new list<int>[V]; 
-            for(int i = 0; i < V; ++i) {
+        for(int i = 0; i < V; ++i) {
             visited[i] = false;
             ap[i] = false;
             low[i] = 0;
-            // parent[i] = -1;
-            // ids[i] = i;
         }
     }
+    void printLow() {
+        for(int i = 0; i < V; i++) {
+            cout << low[i] << " ";
+        }
+    }
+    // Clear visited array (set to the default - false)
+    void clear() {
+        id = 0;
+        for(int i = 0; i < V; ++i) {
+            visited[i] = false;
+            low[i] = 0;
+            //ids[i] = 0;
+        }
+        return;
+    }
     void addEdge(int v, int w);
+    
+    // Articulation Points
     void AP();
+    
+    // Bridges (Articulation Edges)
+    void BG();
 };
 
 void Graph::addEdge(int v, int w) {
@@ -87,7 +110,7 @@ void Graph::dfsAP(int root, int at, int parent) {
     if(parent == root)
         ++outEdges;
     visited[at] = true;
-    low[at] = ids[at] = id;
+    low[at] = id;
     ++id;
     
     // iterate all adjacent vertices
@@ -102,16 +125,55 @@ void Graph::dfsAP(int root, int at, int parent) {
             low[at] = min(low[at], low[to]);
             
             // 1. AP found through bridge
-            if(ids[at] < low[to])
+            if(at < low[to])
                 ap[at] = true;
             // 2. AP found through cycle
-            if(ids[at] == low[to])
+            if(at == low[to]) {
+                // cout << "\""<< at << ", " << to << "\"";
                 ap[at] = true;
+            }
         }
         else {
             // Update low-link value of at for parent function calls. 
-            low[at] = min(low[at], ids[to]);
+            low[at] = min(low[at], to);
         }
+    }
+}
+
+void Graph::BG() {
+    for(int i = 0; i < V; ++i) {
+        if(!visited[i]) {
+            // dfsBG(at, parent, bridges)
+            dfsBG(i, -1);
+        }
+    }
+    // Print bg
+    for(auto& b : bg) {
+        cout << "{" << b.first << "," << b.second << "}";
+    }
+}
+
+void Graph::dfsBG(int at, int parent) {
+    visited[at] = true;
+    low[at] = id;
+    ++id;
+    
+    for(auto i = adj[at].begin(); i != adj[at].end(); ++i) {
+        int to = *i; 
+        if(to == parent) continue;
+        if(!visited[to]) {
+            dfsBG(to, at);
+            // set low-link value of at
+            low[at] = min(low[at], low[to]);
+            // AP found through bridge
+            //if(at == 1 && to == 2)
+              //  cout << "!!!03:" << ids[at] << low[to] <<"!!!\n";
+            if(at < low[to])
+                bg.emplace_back(at, to);
+        }
+        else
+            // Update low-link value of at for parent function calls. 
+            low[at] = min(low[at], to);
     }
 }
 
@@ -124,7 +186,12 @@ int main() {
     g1.addEdge(3, 4); 
     printf("g1 AP:");
     g1.AP();
+    g1.clear();
+    printf("g1 BG:");
+    g1.BG();
     printf("\n");
+    //g1.printLow();
+    
     
     Graph g2(4); 
     g2.addEdge(0, 1); 
@@ -132,7 +199,11 @@ int main() {
     g2.addEdge(2, 3); 
     printf("g2 AP:");
     g2.AP();
+    g2.clear();
+    printf("g2 BG:");
+    g2.BG();
     printf("\n");
+    
     
     return 0;
 }
