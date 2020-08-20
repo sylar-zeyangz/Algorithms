@@ -34,11 +34,11 @@ private:
     list<int> *adj; // Dynamic array of adjacency vertices
     list<pair<int, int>> bg; // bridges
     
-    bool *visited = new bool(V);  // mark traversed vertices
-    int *low = new int(V);  // low-link value for each vertex
-    //int *ids = new int(V);
-    bool *ap = new bool(V);  // track AP 
-    // int *parent = new int(V);  // track parent vertices
+    int *ids = new int[V];
+    bool *visited = new bool[V];  // mark traversed vertices
+    int *low = new int[V];  // low-link value for each vertex
+    bool *ap = new bool[V];  // track AP 
+    // int *parent = new int[V];  // track parent vertices
     
     void dfsAP(int root, int at, int parent);
     void dfsBG(int at, int parent);
@@ -63,7 +63,6 @@ public:
         for(int i = 0; i < V; ++i) {
             visited[i] = false;
             low[i] = 0;
-            //ids[i] = 0;
         }
         return;
     }
@@ -110,7 +109,7 @@ void Graph::dfsAP(int root, int at, int parent) {
     if(parent == root)
         ++outEdges;
     visited[at] = true;
-    low[at] = id;
+    low[at] = ids[at] = id;
     ++id;
     
     // iterate all adjacent vertices
@@ -125,17 +124,17 @@ void Graph::dfsAP(int root, int at, int parent) {
             low[at] = min(low[at], low[to]);
             
             // 1. AP found through bridge
-            if(at < low[to])
+            if(ids[at] < low[to])
                 ap[at] = true;
             // 2. AP found through cycle
-            if(at == low[to]) {
+            if(ids[at] == low[to]) {
                 // cout << "\""<< at << ", " << to << "\"";
                 ap[at] = true;
             }
         }
         else {
             // Update low-link value of at for parent function calls. 
-            low[at] = min(low[at], to);
+            low[at] = min(low[at], ids[to]);
         }
     }
 }
@@ -155,7 +154,7 @@ void Graph::BG() {
 
 void Graph::dfsBG(int at, int parent) {
     visited[at] = true;
-    low[at] = id;
+    low[at] = ids[at] = id;
     ++id;
     
     for(auto i = adj[at].begin(); i != adj[at].end(); ++i) {
@@ -168,14 +167,70 @@ void Graph::dfsBG(int at, int parent) {
             // AP found through bridge
             //if(at == 1 && to == 2)
               //  cout << "!!!03:" << ids[at] << low[to] <<"!!!\n";
-            if(at < low[to])
+            if(ids[at] < low[to])
                 bg.emplace_back(at, to);
         }
         else
             // Update low-link value of at for parent function calls. 
-            low[at] = min(low[at], to);
+            low[at] = min(low[at], ids[to]);
     }
 }
+
+
+/*
+// If an undirected connections was given..
+
+class Solution {
+public:
+    vector<vector<int>> bg;
+    bool* visited;
+    int* low;
+    int* ids;
+    list<int>* adj;
+    
+    
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        visited = new bool[n];
+        low = new int[n];
+        ids = new int[n];
+        for(int i = 0; i < n; ++i) {
+            visited[i] = false;
+        }
+        adj = new list<int>[n];
+        for(auto& v : connections) {
+            adj[v[0]].push_back(v[1]);
+            adj[v[1]].push_back(v[0]);
+        }
+        for(int i = 0; i < n; ++i) {
+            if(!visited[i])
+                dfsBG(i, -1);
+        }
+        return bg;
+    }
+    
+    void dfsBG(int at, int parent) {
+        static int id = 0;
+        visited[at] = true;
+        low[at] = ids[at] = id;
+        ++id;
+        for(auto i = adj[at].begin(); i != adj[at].end(); ++i) {
+            int to = *i;
+            if(to == parent) continue;
+            if(!visited[to]) {
+                dfsBG(to, at);
+                // set low link value
+                low[at] = min(low[at], low[to]);
+                if(ids[at] < low[to]) {
+                    bg.emplace_back(vector<int>{at, to});
+                }
+            }
+            else
+                low[at] = min(low[at], ids[to]);
+        }
+    }
+};
+
+*/
 
 int main() {
     Graph g1(5); 
@@ -204,6 +259,9 @@ int main() {
     g2.BG();
     printf("\n");
     
-    
+    /*
+    g1 AP:0 3 g1 BG:{3,4}{0,3}
+    g2 AP:1 2 g2 BG:{2,3}{1,2}{0,1}
+    */
     return 0;
 }
