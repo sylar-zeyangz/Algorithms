@@ -1,1 +1,1 @@
-Generalization of Alogrithms and Data Structures
+Generalization of Popular Alogrithms and Data Structures
