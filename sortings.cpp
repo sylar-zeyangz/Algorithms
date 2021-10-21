@@ -116,16 +116,16 @@ int* insertionSort(int* _a, int _size) {
 int* mergeSort(int* _a, int l, int r) {
     // ##### Time: nlogn (for all cases), Space n #####
     int m;
-	if (l < r) {
-		//mid=(low+high)/2;
+    if (l < r) {
+    //mid=(low+high)/2;
         m = l + (r - l)/2;
-		// Split the data into two half.
-		mergeSort(_a, l, m);
-		mergeSort(_a, m + 1, r);
- 
-		// Merge them to get sorted output.
-		_a = merge(_a, l, r, m);    
-	}
+	// Split the data into two half.
+	mergeSort(_a, l, m);
+	mergeSort(_a, m + 1, r);
+
+	// Merge them to get sorted output.
+	_a = merge(_a, l, r, m);    
+    }
     return _a;
 }
 
