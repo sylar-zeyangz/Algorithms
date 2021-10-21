@@ -72,8 +72,11 @@ int main () {
 
 // Pass an array: (int* _a) or (int _a[]) 
 // Return an array: return _a; 
-int* selectionSort(int* _a, int _size) {
-    // Time: n^2 (for all cases), Space 1
+
+// ***** Selection Sort *****
+// Repeatedly finding the minimum element (considering ascending order) from unsorted part and putting it at the beginning
+int* selectionSort(int* _a, int _size) { 
+    // ##### Time: n^2 (for all cases), Space 1 #####
     for (int i = 0; i < _size; ++i) {
         int min_ind = i;
         for (int j = i + 1; j < _size; ++j) {
@@ -85,8 +88,13 @@ int* selectionSort(int* _a, int _size) {
     return _a;
 }
 
+// ***** Insertion Sort *****
+// To sort an array of size n in ascending order: 
+// 1: Iterate from arr[1] to arr[n] over the array. 
+// 2: Compare the current element (key) to its predecessor. 
+// 3: If the key element is smaller than its predecessor, compare it to the elements before. Move the greater elements one position up to make space for the swapped element.
 int* insertionSort(int* _a, int _size) {
-    // Time: n^2, Space 1
+    // ##### Time: n^2, Space 1 #####
     // Note that the best Time Complexity is n
     if (_size <= 1)
         return _a;
@@ -102,8 +110,11 @@ int* insertionSort(int* _a, int _size) {
     return _a;
 }
 
+// ***** Merge Sort *****
+// Merge Sort is a Divide and Conquer algorithm. 
+// It divides the input array into two halves, calls itself for the two halves, and then merges the two sorted halves.
 int* mergeSort(int* _a, int l, int r) {
-    // Time: nlogn (for all cases), Space n 
+    // ##### Time: nlogn (for all cases), Space n #####
     int m;
 	if (l < r) {
 		//mid=(low+high)/2;
@@ -149,8 +160,11 @@ int* merge(int* _a, int l, int r, int m)
     return _a;
 }
 
+// ***** Quick Sort *****
+// Like Merge Sort, QuickSort is a Divide and Conquer algorithm. 
+// It picks an element as pivot and partitions the given array around the picked pivot. (Pivot can be the first, median, last, random element)
 int* quickSort(int* _a, int start, int end) {
-    // Time: n^2, Space logn 
+    // ##### Time: nlogn (worst n^2), Space logn #####
     // Note that average and best Time Complexity is nlogn
     // which is most likly to happen.
     if (start < end) {
@@ -172,8 +186,10 @@ int partition(int* _a, int start, int end) {
     return p_index;
 }
 
+// ***** Bubble Sort *****
+// Repeatedly swapping the adjacent elements if they are in wrong order
 int* bubbleSort(int* _a, int _size) {
-    // Time: n^2 (Worst = Ave), Space 1 
+    // ##### Time: n^2 (Worst = Ave), Space 1 #####
     // Note that the best case of Time Complexity is n
     if (_size < 2) 
         return _a;
